@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Projets étudiants de [Prénom Nom] — BUT Science des Données" />
+  <title>Projets — Portfolio BUT SD</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* Filtres */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-bar label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .filter-bar select {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-main);
+      padding: 0.5rem 2.5rem 0.5rem 0.9rem;
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238892A4' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.8rem center;
+    }
+    .filter-bar select:focus { outline: 2px solid var(--accent-cyan); }
+
+    /* Grille projets */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      transition: border-color var(--transition);
+    }
+
+    .project-card:hover {
+      border-color: rgba(0,194,255,0.35);
+    }
+
+    .project-card__meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .project-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+    }
+
+    .project-card p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      flex: 1;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .project-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .project-card__actions {
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    .project-card__actions a,
+    .project-card__actions button {
+      font-size: 0.8rem;
+      padding: 0.4rem 0.8rem;
+    }
+
+    .project-card__actions button {
+      font-family: var(--font-body);
+    }
+
+    /* Message vide */
+    #empty-msg {
+      display: none;
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* ════════════════ MODALE PROJET ════════════════ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 14, 26, 0.75);
+      backdrop-filter: blur(2px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1.5rem;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 760px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 1.3rem 1.5rem 0;
+      gap: 1rem;
+    }
+
+    .modal-header h2 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-size: 1rem;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all var(--transition);
+    }
+
+    .modal-close:hover {
+      color: var(--text-main);
+      border-color: var(--accent-cyan);
+    }
+
+    /* Onglets */
+    .modal-tabs {
+      display: flex;
+      gap: 0.3rem;
+      padding: 1.2rem 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-tab {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      font-weight: 500;
+      padding: 0.6rem 1rem;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color var(--transition), border-color var(--transition);
+    }
+
+    .modal-tab:hover {
+      color: var(--text-main);
+    }
+
+    .modal-tab.active {
+      color: var(--accent-cyan);
+      border-bottom-color: var(--accent-cyan);
+    }
+
+    /* Corps */
+    .modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .modal-panel {
+      display: none;
+    }
+
+    .modal-panel.active {
+      display: block;
+    }
+
+    /* Onglet description */
+    .modal-panel--description p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .modal-panel--description h3 {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin: 1.2rem 0 0.5rem;
+    }
+
+    /* Onglet images */
+    .modal-images {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .modal-images figure {
+      margin: 0;
+    }
+
+    .modal-images img {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      display: block;
+    }
+
+    .modal-images figcaption {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.4rem;
+      text-align: center;
+    }
+
+    /* Onglet documents */
+    .modal-docs {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .modal-docs a {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      background: var(--bg-card-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      transition: border-color var(--transition);
+    }
+
+    .modal-docs a:hover {
+      border-color: var(--accent-cyan);
+      opacity: 1;
+    }
+
+    .modal-docs .doc-icon {
+      font-size: 1.2rem;
+    }
+
+    @media (max-width: 600px) {
+      .modal-tabs { overflow-x: auto; }
+      .modal-tab { white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="hamburger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="sidebar">☰</button>
+
+  <div class="site-wrapper">
+
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Navigation principale">
+      <p class="sidebar__logo"><span>{ </span>SD Portfolio<span> }</span></p>
+      <p class="sidebar__tagline">BUT Science des Données</p>
+      <nav>
+        <ul>
+          <li><a href="index.html"><span class="nav-icon" aria-hidden="true">🏠</span> Accueil</a></li>
+          <li><a href="cv.html"><span class="nav-icon" aria-hidden="true">📄</span> Curriculum Vitae</a></li>
+          <li><a href="projets.html"><span class="nav-icon" aria-hidden="true">📊</span> Projets</a></li>
+          <li><a href="apropos.html"><span class="nav-icon" aria-hidden="true">🙋</span> À propos</a></li>
+          <li><a href="contact.html"><span class="nav-icon" aria-hidden="true">✉️</span> Contact</a></li>
+        </ul>
+      </nav>
+      <p class="sidebar__footer">© 2025 Nolan Billaud</p>
+    </aside>
+
+    <main class="main-content" id="main">
+
+      <header class="page-header">
+        <p class="eyebrow">Mes travaux</p>
+        <h1>Projets étudiants</h1>
+        <p>Travaux réalisés en première année de BUT SD, dans le cadre des SAÉ ou de cours.</p>
+      </header>
+
+      <!-- Filtres -->
+      <div class="filter-bar" role="search" aria-label="Filtrer les projets">
+        <label for="filter-cat">Catégorie :</label>
+        <select id="filter-cat" aria-label="Filtrer par catégorie">
+          <option value="all">Toutes les catégories</option>
+          <option value="b1">Bloc 1</option>
+          <option value="b2">Bloc 2</option>
+          <option value="b3">Bloc 3</option>
+		  <option value="bAll">Inter-bloc</option>
+        </select>
+
+        <label for="filter-semestre" style="margin-left:0.5rem;">Semestre :</label>
+        <select id="filter-semestre" aria-label="Filtrer par semestre">
+          <option value="all">Tous les semestres</option>
+          <option value="s1">Semestre 1</option>
+          <option value="s2">Semestre 2</option>
+        </select>
+      </div>
+
+      <!-- Grille -->
+      <section aria-label="Liste des projets">
+        <div class="projects-grid" id="projects-grid">
+
+          <!-- Projet 1 -->
+          <article class="project-card" data-cat="b3" data-semestre="s1">
+            <p class="project-card__meta">Semestre 1</p>
+            <h3>SAE - Présentation en anglais d'un territoire économique et culturel</h3>
+            <p>
+              Présentation d'une ville française en français, puis d'une de ses villes jumelées en anglais.
+            </p>
+            <div class="project-card__tags">
+              <span class="tag">PowerPoint</span>
+            </div>
+            <div class="project-card__actions">
+              <button type="button" class="btn btn--outline" data-modal-target="modal-projet-1">Voir le projet</button>
+            </div>
+          </article>
+
+          <!-- Projet 2 -->
+          <article class="project-card" data-cat="b2" data-semestre="s1">
+            <p class="project-card__meta">Semestre 1</p>
+            <h3>SAE - Préparation et synthèse d'un tableau de données en vue d'une analyse exploratoire simple</h3>
+            <p>
+				Étude de l'utilisation du téléphone dans différente formation présente dans l'IUT, puis confection d'un rapport avec graphique sur notre étude.
+            </p>
+            <div class="project-card__tags">
+              <span class="tag">Sphinx</span>
+              <span class="tag">Word</span>
+            </div>
+            <div class="project-card__actions">
+              <button type="button" class="btn btn--outline" data-modal-target="modal-projet-2">Voir le projet</button>
+            </div>
+          </article>
+
+          <!-- Projet 3 -->
+          <article class="project-card" data-cat="b1" data-semestre="s1">
+            <p class="project-card__meta">Semestre 1</p>
+            <h3>SAE - Reporting à partir de données stockées dans un SGBD relationnel</h3>
+            <p>
+				Confection d'un tableau de bord sur excel destiné a un élève pour qu'il puisse suivre l'évolution de ses notes
+            </p>
+            <div class="project-card__tags">
+              <span class="tag">Excel</span>
+              <span class="tag">VBA</span>
+            </div>
+            <div class="project-card__actions">
+              <button type="button" class="btn btn--outline" data-modal-target="modal-projet-3">Voir le projet</button>
+            </div>
+          </article>
+
+          <!-- Projet 4 -->
+          <article class="project-card" data-cat="bAll" data-semestre="s2">
+            <p class="project-card__meta">Semestre 2</p>
+            <h3>SAE - Analyse de données, reporting et datavisualisation</h3>
+            <p>
+               Création d'un outil pour le laboratoire qualyse permettant de centraliser des fichiers excel contenant les valeurs sur les sujets testés
+            </p>
+            <div class="project-card__tags">
+              <span class="tag">Excel</span>
+              <span class="tag">Python (pandas)</span>
+              <span class="tag">Trello (organisation du projet)</span>
+            </div>
+            <div class="project-card__actions">
+              <button type="button" class="btn btn--outline" data-modal-target="modal-projet-4">Voir le projet</button>
+            </div>
+          </article>
+
+          <!-- Projet 5 placeholder -->
+          <article class="project-card" data-cat="b2" data-semestre="s2">
+            <p class="project-card__meta">Semestre 2</p>
+            <h3>SAE - Estimation par échantillonnage</h3>
+            <p>
+              Estimation d'une population selon différent type de tirage
+            </p>
+            <div class="project-card__tags">
+              <span class="tag">R</span>
+			  <span class="tag">Word</span>
+            </div>
+            <div class="project-card__actions">
+              <button type="button" class="btn btn--outline" data-modal-target="modal-projet-5">Voir le projet</button>
+            </div>
+          </article>
+
+		  <!-- Projet 6 placeholder -->
+          <article class="project-card" data-cat="b2" data-semestre="s2">
+            <p class="project-card__meta">Semestre 2</p>
+            <h3>SAE - Régression sur des données réelles</h3>
+            <p>
+              Prédire les valeurs foncières de logement dans l'agglomération niortaise
+            </p>
+            <div class="project-card__tags">
+              <span class="tag">R</span>
+			  <span class="tag">Word</span>
+            </div>
+            <div class="project-card__actions">
+              <button type="button" class="btn btn--outline" data-modal-target="modal-projet-6">Voir le projet</button>
+            </div>
+          </article>
+
+
+			<!-- Projet 7 placeholder -->
+          <article class="project-card" data-cat="b3" data-semestre="s2">
+            <p class="project-card__meta">Semestre 2</p>
+            <h3>SAE - Construction et présentation d’indicateurs de performance</h3>
+            <p>
+              Évalué la situation d'une entreprise à l'aide de KPI
+            </p>
+            <div class="project-card__tags">
+              <span class="tag">Excel</span>
+			  <span class="tag">Word</span>
+            </div>
+            <div class="project-card__actions">
+              <button type="button" class="btn btn--outline" data-modal-target="modal-projet-7">Voir le projet</button>
+            </div>
+          </article>
+
+
+        </div>
+
+        <p id="empty-msg" role="status" aria-live="polite">Aucun projet ne correspond à ces filtres.</p>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ════════════════ MODALES PROJETS ════════════════ -->
+
+  <!-- Modale Projet 1 -->
+  <div class="modal-overlay" id="modal-projet-1" role="dialog" aria-modal="true" aria-labelledby="modal-projet-1-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="modal-projet-1-title">SAE - Présentation en anglais d'un territoire économique et culturel</h2>
+        <button type="button" class="modal-close" aria-label="Fermer la fenêtre">✕</button>
+      </div>
+      <div class="modal-tabs" role="tablist">
+        <button type="button" class="modal-tab active" role="tab" aria-selected="true" data-tab="description">Description</button>
+        <button type="button" class="modal-tab" role="tab" aria-selected="false" data-tab="images">Images</button>
+        <button type="button" class="modal-tab" role="tab" aria-selected="false" data-tab="documents">Documents</button>
+      </div>
+      <div class="modal-body">
+
+        <div class="modal-panel modal-panel--description active" data-panel="description">
+          <h3>Objectif</h3>
+          <p>En groupe de 3, l'objectif était de présenter deux villes jumelées, d'abord en français puis en anglais a l'aide d'un PowerPoint, et cela devant un public d'environ 20 personnes. Nous avons donc présenter la ville de Chambéry en France puis la ville de Turin en Italie.</p>
+          <h3>Démarche</h3>
+          <p>Nous avons donc répartie les taches dans le groupe, l'un s'occupait du PowerPoint et les deux autres des recherches sur les deux villes. Je me suis occuper de recupérer des informations sur la ville de Turin a l'aide d'internet, puis j'ai aidé mes camarades en anglais</p>
+          <h3>Résultat</h3>
+          <p>Il s'agissait de la première SAÉ que nous avons réalisé dans ce cursus, elle m'a permis d'obtenir une certaine aisance a l'oral devant un public de presque inconnu. Aussi, j'ai pu pour la première fois faire un oral en anglais. J'en tire une meilleur maitrise de l'anglais, ainsi que de la communication en générale.</p>
+        </div>
+
+        <div class="modal-panel" data-panel="images">
+          <div class="modal-images">
+            <figure>
+              <img src="assets/territoire_screen.png" alt="Capture d'écran 1 du projet 1" />
+              <figcaption>Capture d'écran du fichier word qui réparti les sujets</figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <div class="modal-panel" data-panel="documents">
+          <ul class="modal-docs">
+            <li>
+              <a href="assets/rapport-p1.pdf" target="_blank" rel="noopener noreferrer">
+                <span class="doc-icon" aria-hidden="true">📄</span>
+                PowerPoint du projet (pas encore disponible)
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modale Projet 2 -->
+  <div class="modal-overlay" id="modal-projet-2" role="dialog" aria-modal="true" aria-labelledby="modal-projet-2-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="modal-projet-2-title">SAE - Préparation et synthèse d'un tableau de données en vue d'une analyse exploratoire simple</h2>
+        <button type="button" class="modal-close" aria-label="Fermer la fenêtre">✕</button>
+      </div>
+      <div class="modal-tabs" role="tablist">
+        <button type="button" class="modal-tab active" role="tab" aria-selected="true" data-tab="description">Description</button>
+        <button type="button" class="modal-tab" role="tab" aria-selected="false" data-tab="documents">Documents</button>
+      </div>
+      <div class="modal-body">
+
+        <div class="modal-panel modal-panel--description active" data-panel="description">
+          <h3>Objectif</h3>
+          <p>Projet en duo, nous avions une enquête sphinx sur l'utilisation du téléphone dans les formations de l'IUT. Nous avons du rendre un rapport sur la problématique de notre choix, ainsi qu'un reporting visuel.</p>
+          <h3>Démarche</h3>
+          <p>Comprehension du jeu de donnée, puis choix de la problématique, et reponse avec des graphiques créer sur sphinx, puis expliqué sur word</p>
+		  <h3>Résultat</h3>
+          <p>Maitrise de l'outil sphinx, meilleur compréhension des données acquise</p>
+        </div>
+
+ 
+
+        <div class="modal-panel" data-panel="documents">
+          <ul class="modal-docs">
+            <li>
+              <a href="assets/SAE analyse explo simple.pdf" target="_blank" rel="noopener noreferrer">
+                <span class="doc-icon" aria-hidden="true">📄</span>
+                Rapport du projet (PDF)
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modale Projet 3 -->
+  <div class="modal-overlay" id="modal-projet-3" role="dialog" aria-modal="true" aria-labelledby="modal-projet-3-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="modal-projet-3-title">SAE - Reporting à partir de données stockées dans un SGBD relationnel</h2>
+        <button type="button" class="modal-close" aria-label="Fermer la fenêtre">✕</button>
+      </div>
+      <div class="modal-tabs" role="tablist">
+        <button type="button" class="modal-tab active" role="tab" aria-selected="true" data-tab="description">Description</button>
+        <button type="button" class="modal-tab" role="tab" aria-selected="false" data-tab="images">Images</button>
+        <button type="button" class="modal-tab" role="tab" aria-selected="false" data-tab="documents">Documents</button>
+      </div>
+      <div class="modal-body">
+
+        <div class="modal-panel modal-panel--description active" data-panel="description">
+          <h3>Objectif</h3>
+          <p>Créer un tableau de bord qui prend en compte toute les contraintes lié au calcul des notes du BUT SD (coefficient, bonifiant, ABI, passage en 2eme année, etc)</p>
+          <h3>Démarche</h3>
+          <p>Cahier des charges des besoins de l'outil, confection du tableau de bord sur excel avec des boutons faits en VBA, formule excel pour calculer les moyennes</p>
+		  <h3>Résultat</h3>
+          <p>Confection d'un tableau de bord interactif en VBA, comprendre l'utilité d'un tableau excel dynamique</p>
+        </div>
+
+        <div class="modal-panel" data-panel="images">
+          <div class="modal-images">
+            <figure>
+              <img src="assets/userformVBA.png" alt="Capture d'écran 1 du projet 3" />
+              <figcaption>Exemple de userform fait en VBA</figcaption>
+            </figure>
+            <figure>
+              <img src="assets/codeVBA.png" alt="Capture d'écran 2 du projet 3" />
+              <figcaption>Exemple de code VBA</figcaption>
+            </figure>
+          </div>
+        </div>
+
+
+        <div class="modal-panel" data-panel="documents">
+          <ul class="modal-docs">
+            <li>
+              <a href="assets/SAE (1) (1).xlsm" target="_blank" rel="noopener noreferrer">
+                <span class="doc-icon" aria-hidden="true">📄</span>
+                Excel final
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modale Projet 4 -->
+  <div class="modal-overlay" id="modal-projet-4" role="dialog" aria-modal="true" aria-labelledby="modal-projet-4-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="modal-projet-4-title">SAE - Analyse de données, reporting et datavisualisation</h2>
+        <button type="button" class="modal-close" aria-label="Fermer la fenêtre">✕</button>
+      </div>
+      <div class="modal-tabs" role="tablist">
+        <button type="button" class="modal-tab active" role="tab" aria-selected="true" data-tab="description">Description</button>
+        <button type="button" class="modal-tab" role="tab" aria-selected="false" data-tab="documents">Documents</button>
+      </div>
+      <div class="modal-body">
+
+        <div class="modal-panel modal-panel--description active" data-panel="description">
+          <h3>Objectif</h3>
+          <p>Création d'un outil pour le laboratoire qualyse permettant de centraliser des fichiers excel contenant les valeurs sur les sujets testés, en utilisant la méthode scrum</p>
+          <h3>Démarche</h3>
+          <p>Organisation du travail en suivant la méthode scrum, cahier des charges de tout les besoins nécessaire à l'outil, creation d'une interface tkinter avec un tableau de bord</p>
+		  <h3>Résultat</h3>
+          <p>Réaliser que les sources de données ont des caractéristiques propres à considérer, identifier l’importance de contextualiser ses données</p>
+        </div>
+
+
+
+        <div class="modal-panel" data-panel="documents">
+          <ul class="modal-docs">
+            <li>
+              <a href="assets/sae final.zip" target="_blank" rel="noopener noreferrer">
+                <span class="doc-icon" aria-hidden="true">📄</span>
+                SAE complète
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modale Projet 5 -->
+  <div class="modal-overlay" id="modal-projet-5" role="dialog" aria-modal="true" aria-labelledby="modal-projet-5-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="modal-projet-5-title">SAE - Estimation par échantillonnage</h2>
+        <button type="button" class="modal-close" aria-label="Fermer la fenêtre">✕</button>
+      </div>
+      <div class="modal-tabs" role="tablist">
+        <button type="button" class="modal-tab active" role="tab" aria-selected="true" data-tab="description">Description</button>
+        <button type="button" class="modal-tab" role="tab" aria-selected="false" data-tab="documents">Documents</button>
+      </div>
+      <div class="modal-body">
+
+        <div class="modal-panel modal-panel--description active" data-panel="description">
+          <h3>Objectif</h3>
+          <p>A l'aide de R, estimer la population d'une région française selon différent tirage, puis conclure avec un rapport expliquant quels tirages est le meilleur</p>
+          <h3>Démarche</h3>
+          <p>Construction du script R en parallèle du rapport</p>
+		  <h3>Résultat</h3>
+          <p>Comprendre les meilleurs tirages statistiques en fonction du contexte</p>
+        </div>
+
+        <div class="modal-panel" data-panel="documents">
+          <ul class="modal-docs">
+            <li>
+              <a href="assets/statinf rapport final.pdf" target="_blank" rel="noopener noreferrer">
+                <span class="doc-icon" aria-hidden="true">📄</span>
+                Rapport de la SAÉ
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modale Projet 6 -->
+  <div class="modal-overlay" id="modal-projet-6" role="dialog" aria-modal="true" aria-labelledby="modal-projet-5-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="modal-projet-6-title">SAE - Estimation par échantillonnage</h2>
+        <button type="button" class="modal-close" aria-label="Fermer la fenêtre">✕</button>
+      </div>
+      <div class="modal-tabs" role="tablist">
+        <button type="button" class="modal-tab active" role="tab" aria-selected="true" data-tab="description">Description</button>
+        <button type="button" class="modal-tab" role="tab" aria-selected="false" data-tab="documents">Documents</button>
+      </div>
+      <div class="modal-body">
+
+        <div class="modal-panel modal-panel--description active" data-panel="description">
+          <h3>Objectif</h3>
+          <p>Prédire via R, selon notre échantillonnage, les valeurs foncières de l'agglomération niortaise</p>
+          <h3>Démarche</h3>
+          <p>Choix d'un échantillonnage, construction d'un programme R pour prédire les valeurs</p>
+		  <h3>Résultat</h3>
+          <p>Comprendre "le terrain" via les statistiques</p>
+        </div>
+
+        <div class="modal-panel" data-panel="documents">
+          <ul class="modal-docs">
+            <li>
+              <a href="assets/rapport regression.docx" target="_blank" rel="noopener noreferrer">
+                <span class="doc-icon" aria-hidden="true">📄</span>
+                Rapport de la SAÉ
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+  
+    <!-- Modale Projet 7 -->
+  <div class="modal-overlay" id="modal-projet-7" role="dialog" aria-modal="true" aria-labelledby="modal-projet-5-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="modal-projet-7-title">SAE - Construction et présentation d’indicateurs de performance</h2>
+        <button type="button" class="modal-close" aria-label="Fermer la fenêtre">✕</button>
+      </div>
+      <div class="modal-tabs" role="tablist">
+        <button type="button" class="modal-tab active" role="tab" aria-selected="true" data-tab="description">Description</button>
+        <button type="button" class="modal-tab" role="tab" aria-selected="false" data-tab="documents">Documents</button>
+      </div>
+      <div class="modal-body">
+
+        <div class="modal-panel modal-panel--description active" data-panel="description">
+          <h3>Objectif</h3>
+          <p>Comprendre la situation d'une entreprise et en faire un rapport à l'aide des KPIs</p>
+          <h3>Démarche</h3>
+          <p>Récuperation des données, calcul des KPIs avec des formules excel, rédaction d'un rapport</p>
+		  <h3>Résultat</h3>
+          <p>Comprendre les facteurs clés qui permette de faire le bilan d'une entreprise</p>
+        </div>
+
+        <div class="modal-panel" data-panel="documents">
+          <ul class="modal-docs">
+            <li>
+              <a href="assets/hado.pdf" target="_blank" rel="noopener noreferrer">
+                <span class="doc-icon" aria-hidden="true">📄</span>
+                Rapport de la SAÉ (indisponible pour l'instant)
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="js/nav.js"></script>
+  <script>
+    /* Filtrage des projets */
+    const catSelect      = document.getElementById('filter-cat');
+    const semestreSelect = document.getElementById('filter-semestre');
+    const cards          = document.querySelectorAll('.project-card');
+    const emptyMsg       = document.getElementById('empty-msg');
+
+    function filterProjects() {
+      const cat      = catSelect.value;
+      const semestre = semestreSelect.value;
+      let visible = 0;
+
+      cards.forEach(card => {
+        const matchCat      = (cat      === 'all') || (card.dataset.cat      === cat);
+        const matchSemestre = (semestre === 'all') || (card.dataset.semestre === semestre);
+        const show = matchCat && matchSemestre;
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+
+      emptyMsg.style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    catSelect.addEventListener('change',      filterProjects);
+    semestreSelect.addEventListener('change', filterProjects);
+
+    /* ── Gestion des modales ── */
+    let lastFocusedElement = null;
+
+    function openModal(modal) {
+      lastFocusedElement = document.activeElement;
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      const closeBtn = modal.querySelector('.modal-close');
+      if (closeBtn) closeBtn.focus();
+    }
+
+    function closeModal(modal) {
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+      if (lastFocusedElement) lastFocusedElement.focus();
+    }
+
+    /* Ouverture via les boutons "Voir le projet" */
+    document.querySelectorAll('[data-modal-target]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const modal = document.getElementById(btn.dataset.modalTarget);
+        if (modal) openModal(modal);
+      });
+    });
+
+    /* Fermeture via le bouton ✕, le clic sur l'overlay, ou la touche Échap */
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+      modal.querySelector('.modal-close').addEventListener('click', () => closeModal(modal));
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal(modal);
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const openModalEl = document.querySelector('.modal-overlay.open');
+        if (openModalEl) closeModal(openModalEl);
+      }
+    });
+
+    /* ── Gestion des onglets dans chaque modale ── */
+    document.querySelectorAll('.modal-box').forEach(box => {
+      const tabs   = box.querySelectorAll('.modal-tab');
+      const panels = box.querySelectorAll('.modal-panel');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+          });
+          panels.forEach(p => p.classList.remove('active'));
+
+          tab.classList.add('active');
+          tab.setAttribute('aria-selected', 'true');
+          box.querySelector(`.modal-panel[data-panel="${tab.dataset.tab}"]`).classList.add('active');
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+

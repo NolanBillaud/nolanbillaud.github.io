@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="À propos de [Prénom Nom] — passions, loisirs et vision" />
+  <title>À propos — Portfolio BUT SD</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ── Profil photo zone ── */
+    .about-hero {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .about-avatar {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      position: relative;
+    }
+
+    .about-avatar::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid rgba(0,194,255,0.35);
+    }
+
+    .about-intro h2 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .about-intro .role {
+      color: var(--accent-cyan);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.8rem;
+    }
+
+    .about-intro p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    /* ── Blockquote citation ── */
+    blockquote {
+      border-left: 3px solid var(--accent-cyan);
+      padding: 0.8rem 1.5rem;
+      background: rgba(0,194,255,0.05);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      font-style: italic;
+      color: var(--text-muted);
+      margin: 1.5rem 0;
+    }
+
+    blockquote cite {
+      display: block;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      font-style: normal;
+      color: var(--accent-cyan);
+      font-weight: 600;
+    }
+
+    /* ── Passions grid ── */
+    .passions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 3rem;
+    }
+
+    .passion-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      transition: border-color var(--transition), transform var(--transition);
+    }
+
+    .passion-card:hover {
+      border-color: rgba(123,97,255,0.5);
+      transform: translateY(-2px);
+    }
+
+    .passion-card__icon {
+      font-size: 2rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .passion-card h3 {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .passion-card p {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ── Frise chronologique "fun facts" ── */
+    .fun-facts {
+      list-style: none;
+      padding: 0;
+      counter-reset: facts;
+    }
+
+    .fun-facts li {
+      counter-increment: facts;
+      display: flex;
+      gap: 1rem;
+      align-items: baseline;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+
+    .fun-facts li:last-child { border-bottom: none; }
+
+    .fun-facts li::before {
+      content: counter(facts, decimal-leading-zero);
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      min-width: 24px;
+    }
+
+    .fun-facts li span { color: var(--text-muted); }
+
+    @media (max-width: 600px) {
+      .about-hero   { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="hamburger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="sidebar">☰</button>
+
+  <div class="site-wrapper">
+
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Navigation principale">
+      <p class="sidebar__logo"><span>{ </span>SD Portfolio<span> }</span></p>
+      <p class="sidebar__tagline">BUT Science des Données</p>
+      <nav>
+        <ul>
+          <li><a href="index.html"><span class="nav-icon" aria-hidden="true">🏠</span> Accueil</a></li>
+          <li><a href="cv.html"><span class="nav-icon" aria-hidden="true">📄</span> Curriculum Vitae</a></li>
+          <li><a href="projets.html"><span class="nav-icon" aria-hidden="true">📊</span> Projets</a></li>
+          <li><a href="apropos.html"><span class="nav-icon" aria-hidden="true">🙋</span> À propos</a></li>
+          <li><a href="contact.html"><span class="nav-icon" aria-hidden="true">✉️</span> Contact</a></li>
+        </ul>
+      </nav>
+      <p class="sidebar__footer">© 2025 Nolan Billaud</p>
+    </aside>
+
+    <main class="main-content" id="main">
+
+      <header class="page-header">
+        <p class="eyebrow">Qui suis-je ?</p>
+        <h1>À propos</h1>
+        <p>Un peu plus que le CV — mes passions, mes valeurs et mon parcours personnel.</p>
+      </header>
+
+      <!-- Intro -->
+      <section class="about-hero" aria-label="Présentation personnelle">
+        <div class="about-avatar" role="img" aria-label="Photo de profil">🧑‍💻</div>
+        <div class="about-intro">
+          <h2>Nolan Billaud</h2>
+          <p class="role">Étudiant en 1ère année de BUT Science des Données</p>
+          <p>
+            Originaire de Niort, je suis passionné par la façon dont les données
+            peuvent transformer notre compréhension du monde. Ce qui m'a poussé vers
+            la Science des Données, c'est d'abord l'aspect statistique, en effet je suis très interessé par les maths depuis le début de ma scolarité. 
+          </p>
+        </div>
+      </section>
+
+      <blockquote>
+        «  L’échec est le fondement de la réussite. »
+        <cite>— Lao-Tseu</cite>
+      </blockquote>
+
+      <hr class="divider" />
+
+      <!-- Passions -->
+      <section aria-labelledby="passions">
+        <h2 style="font-family:var(--font-display); font-size:1.3rem; margin-bottom:1.5rem;" id="passions">
+          Mes passions
+        </h2>
+        <div class="passions-grid">
+
+          <article class="passion-card">
+            <div class="passion-card__icon">🎵</div>
+            <h3>La musique</h3>
+            <p>
+              La musique est pour moi un compagnon permanent, je ne peux pas sortir ou travailler sans musique, elle me permet de me relaxer ou au contraire de me motiver.
+            </p>
+          </article>
+
+
+          <article class="passion-card">
+            <div class="passion-card__icon">🌍</div>
+            <h3>Voyages</h3>
+            <p>
+              J'aime voyager, pas forcemment au bout du monde, mais partir ne serais-ce qu'a quelque heures de chez moi entre amis ou en famille est l'une de mes activitées préferées.
+            </p>
+          </article>
+
+          <article class="passion-card">
+            <div class="passion-card__icon">💻</div>
+            <h3>Nouvelle technologie</h3>
+            <p>
+              Suivre les nouvelle technologie m'interesse tout particulièrement. J'aime voir le monde évolué avec de nouveau outil qui ouvre le champ des possibles, comme l'IA.
+            </p>
+          </article>
+
+          <article class="passion-card">
+            <div class="passion-card__icon">🎮</div>
+            <h3>Jeux vidéo</h3>
+            <p>
+              Passionné de jeux vidéo depuis mon plus jeune âge, c'est un medium qui me permet de m'évader ou me challenger. J'aime aussi suivre des compétitions de jeux vidéo.
+            </p>
+          </article>
+
+        </div>
+      </section>
+
+      <hr class="divider" />
+
+      <!-- Fun facts -->
+      <section aria-labelledby="facts">
+        <h2 style="font-family:var(--font-display); font-size:1.3rem; margin-bottom:1.5rem;" id="facts">
+          En vrac — quelques faits
+        </h2>
+        <ol class="fun-facts">
+          <li><span>Je suis né à Niort.</span></li>
+          <li><span>Mon premier contact avec la programmation : Python en seconde.</span></li>
+          <li><span>En dehors des études, on me retrouve toujours avec des amis.</span></li>
+		  <li><span>J'adore les lasagnes.</span></li>
+        </ol>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/nav.js"></script>
+</body>
+</html>

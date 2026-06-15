@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Portfolio de [Prénom Nom] — Étudiant en BUT Science des Données" />
+  <title>Accueil — Portfolio BUT SD</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* Styles spécifiques à l'accueil */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 4rem 3rem;
+      margin-bottom: 3rem;
+      background: var(--bg-card-2);
+    }
+
+    .hero .dot-grid { border-radius: 16px; }
+
+    .hero__content { position: relative; z-index: 1; }
+
+    .hero__eyebrow {
+      font-size: 0.78rem;
+      color: var(--accent-cyan);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero h1 .highlight {
+      color: var(--accent-cyan);
+    }
+
+    .hero__sub {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero__actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Sections d'accueil */
+    .home-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .home-grid .card h2 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+    }
+
+    .home-grid .card p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .home-grid .card p + p { margin-top: 0.8rem; }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1.2rem;
+    }
+
+    @media (max-width: 700px) {
+      .hero { padding: 2.5rem 1.5rem; }
+      .home-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="hamburger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="sidebar">☰</button>
+
+  <div class="site-wrapper">
+
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Navigation principale">
+      <p class="sidebar__logo"><span>{ </span>SD Portfolio<span> }</span></p>
+      <p class="sidebar__tagline">BUT Science des Données</p>
+
+      <nav>
+        <ul>
+          <li>
+            <a href="index.html">
+              <span class="nav-icon" aria-hidden="true">🏠</span>
+              Accueil
+            </a>
+          </li>
+          <li>
+            <a href="cv.html">
+              <span class="nav-icon" aria-hidden="true">📄</span>
+              Curriculum Vitae
+            </a>
+          </li>
+          <li>
+            <a href="projets.html">
+              <span class="nav-icon" aria-hidden="true">📊</span>
+              Projets
+            </a>
+          </li>
+          <li>
+            <a href="apropos.html">
+              <span class="nav-icon" aria-hidden="true">🙋</span>
+              À propos
+            </a>
+          </li>
+          <li>
+            <a href="contact.html">
+              <span class="nav-icon" aria-hidden="true">✉️</span>
+              Contact
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <p class="sidebar__footer">© 2025 Nolan Billaud</p>
+    </aside>
+
+    <main class="main-content" id="main">
+
+      <!-- Hero -->
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="dot-grid" aria-hidden="true"></div>
+        <div class="hero__content">
+          <p class="hero__eyebrow">Portfolio étudiant — BUT Science des Données</p>
+          <h1 id="hero-title">
+            Bonjour, je suis<br>
+            <span class="highlight">Nolan Billaud</span>
+          </h1>
+          <p class="hero__sub">
+            Étudiant en 1ère année de BUT Science des Données à Niort.
+            Ce site regroupe mon CV, mes projets de SAÉ et quelques mots sur qui je suis,
+            au fil de ma formation.
+          </p>
+          <div class="hero__actions">
+            <a href="projets.html" class="btn btn--primary">
+              Voir mes projets
+            </a>
+            <a href="cv.html" class="btn btn--outline">
+              Mon CV
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Grille de présentation -->
+      <section aria-label="Aperçu du profil">
+        <div class="home-grid">
+
+          <!-- À propos rapide -->
+          <article class="card">
+            <h2>Qui suis-je ?</h2>
+            <p>
+              Je m'appelle Nolan, j'ai 19 ans et je viens de Niort.
+              Après un bac générale avec les spécialité mathématiques et physique-chimie, j'ai choisi le BUT Science
+              des Données pour mon aittrait envers les mathématiques et l'envie de m'insérer dans le monde professionnel.
+            </p>
+            <p>
+              Ce portfolio est avant tout un espace de travail : il évoluera au fil
+              des semestres avec mes projets, mes découvertes et mes progrès.
+            </p>
+          </article>
+
+          <!-- Ce que j'apprends -->
+          <article class="card">
+            <h2>Ce que j'apprends actuellement</h2>
+            <p>
+              Cette première année est centrée sur les bases : statistiques,
+              programmation en Python, bases de données relationnelles (SQL),
+              et premières analyses de jeux de données réels dans le cadre
+              des SAÉ.
+            </p>
+            <div class="tag-row" aria-label="Outils utilisés actuellement">
+              <span class="tag">Python</span>
+			  <span class="tag">R</span>
+              <span class="tag">SQL</span>
+              <span class="tag">SAS</span>
+              <span class="tag">Excel</span>
+              <span class="tag">Power BI</span>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/nav.js"></script>
+</body>
+</html>

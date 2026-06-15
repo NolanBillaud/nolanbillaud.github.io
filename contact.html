@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Contacter [Prénom Nom] — Étudiant BUT Science des Données" />
+  <title>Contact — Portfolio BUT SD</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* Liste des réseaux */
+    .social-links {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      max-width: 480px;
+    }
+
+    .social-links a {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.2rem;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      transition: border-color var(--transition);
+    }
+
+    .social-links a:hover {
+      border-color: var(--accent-cyan);
+      opacity: 1;
+    }
+
+    .social-links .social-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .social-links .social-label {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .social-links .social-label strong {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .social-links .social-label span {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <button class="hamburger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="sidebar">☰</button>
+
+  <div class="site-wrapper">
+
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Navigation principale">
+      <p class="sidebar__logo"><span>{ </span>SD Portfolio<span> }</span></p>
+      <p class="sidebar__tagline">BUT Science des Données</p>
+      <nav>
+        <ul>
+          <li><a href="index.html"><span class="nav-icon" aria-hidden="true">🏠</span> Accueil</a></li>
+          <li><a href="cv.html"><span class="nav-icon" aria-hidden="true">📄</span> Curriculum Vitae</a></li>
+          <li><a href="projets.html"><span class="nav-icon" aria-hidden="true">📊</span> Projets</a></li>
+          <li><a href="apropos.html"><span class="nav-icon" aria-hidden="true">🙋</span> À propos</a></li>
+          <li><a href="contact.html"><span class="nav-icon" aria-hidden="true">✉️</span> Contact</a></li>
+        </ul>
+      </nav>
+      <p class="sidebar__footer">© 2025 Nolan Billaud</p>
+    </aside>
+
+    <main class="main-content" id="main">
+
+      <header class="page-header">
+        <p class="eyebrow">Restons en contact</p>
+        <h1>Me contacter</h1>
+        <p>Vous pouvez me retrouver sur les plateformes suivantes.</p>
+      </header>
+
+      <ul class="social-links" aria-label="Liens vers mes réseaux">
+        <li>
+          <a href="mailto:prenom.nom@email.com">
+            <span class="social-icon" aria-hidden="true">✉️</span>
+            <span class="social-label">
+              <strong>E-mail</strong>
+              <span>nolanbillaudpro@gmail.com</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="https://www.linkedin.com/in/nolan-billaud-b82098417" target="_blank" rel="noopener noreferrer" aria-label="Profil LinkedIn (nouvelle fenêtre)">
+            <span class="social-icon" aria-hidden="true">🔗</span>
+            <span class="social-label">
+              <strong>LinkedIn</strong>
+              <span>/in/nolan.billaud</span>
+            </span>
+          </a>
+        </li>
+
+    </main>
+  </div>
+
+  <script src="js/nav.js"></script>
+</body>
+</html>
